@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'login.dart';
 import 'home_page.dart';
@@ -10,36 +9,31 @@ import 'module_4.dart';
 import 'module_6.dart';
 import 'module_7.dart';
 import 'module_table.dart';
+//#TODO: Yeni Appbar
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => PageControllerProvider(),
-      child: MyApp(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        maxWidth: 1200,
+        minWidth: 450,
+        defaultScale: true,
         breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ResponsiveBreakpoint.resize(450, name: MOBILE),
+          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ResponsiveBreakpoint.autoScale(2460, name: "4K"),
         ],
+        background: Container(color: Color(0xFFF5F5F5)),
       ),
-      home: Consumer<PageControllerProvider>(
-        builder: (context, pageControllerProvider, child) {
-          return M8Page();
-        },
-      ),
+      home: const HomePage(),
       routes: {
-        '/Home': (context) => HomePage(),
         '/Login': (context) => LoginPage(),
         '/M1': (context) => const M1Page(),
         '/M2': (context) => M2Page(),
@@ -86,94 +80,156 @@ class _M8PageState extends State<M8Page> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final bool isDesktop = MediaQuery.of(context).size.width >= 1000;
-    final double sidePadding = isDesktop ? 200 : 30;
-
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF3D1953).withOpacity(0.4),
-        title: Text('Modül 8'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.home),
-            onPressed: () {
-              Provider.of<PageControllerProvider>(context, listen: false)
-                  .changePage(HomePage()); // Ana sayfaya yönlendirme
-            },
-          ),
-        ],
-      ),
-      body: Stack( fit: StackFit.expand,
-      children: [
-        Positioned.fill(
-          child: Image.asset(
-            'android/assets/arkaplan.png', // Arka plan resminizin yolu
-            fit: BoxFit.cover, // Resmi ekranı kaplayacak şekilde ölçekle
-          ),
-        ),
-        SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: sidePadding),
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Container(
-              constraints: BoxConstraints(maxWidth: 650),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Color(0xFF069BBF).withOpacity(0.8),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: const Text(
-                "İlk bölümü bitirdiniz. Buraya kadar devam ettiğiniz ve etkinlikleri yaptığınız için kendinizi tebrik"
-                    "edebilirsiniz."
-                    "Bu sayfada bitirmiş olduğunuz bu bölümü değerlendirmenizi istiyorum. Aşağıdaki sorular"
-                    "doğrultusunda değerlendirmenizi yapınız.",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
+  void _showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Emin misiniz?'),
+          content: Text('Formu göndermek istediğinizden emin misiniz?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Hayır'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
-            SizedBox(height: 100), // Sayfanın kaydırılabilir kısmı için boşluk
-            _buildQuestionContainer(
-              "Bu bölümü okurken dikkatinizi en çok ne çekti? Sizin yaşadıklarınızla buradaki anlatılar benziyor mu? Benziyor ise neresi benziyor?",
-              _controller1,
+            TextButton(
+              child: Text('Evet'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _submitForm();
+                _showAcceptionDialog();
+              },
             ),
-            SizedBox(height: 30),
-            _buildQuestionContainer(
-              "Bu bölümü okurken dikkatinizi en çok ne çekti? Sizin yaşadıklarınızla buradaki anlatılar benziyor mu? Benziyor ise neresi benziyor?",
-              _controller2,
-            ),
-            SizedBox(height: 30),
-            _buildQuestionContainer(
-              "Bu bölümde öğrendiklerinizi kısaca belirtiniz. Bir kaç cümle ya da anahtar kelimelerle belirtebilirsiniz.",
-              _controller3,
-            ),
-            SizedBox(height: 30),
-            _buildQuestionContainer(
-              "Sormak istediğiniz sorular varsa aşağıya yazınız. Aklınıza her ne takılırsa mutlaka sorun.",
-              _controller4,
-            ),
-            SizedBox(height: 30),
-            _buildOptionContainer(
-              "Bu bölüm üzerinde ne kadar çalıştınız?",
-              ['0-15 dk', '15-30 dk', '30-60 dk', '1-3 saat', '3-5 saat'],
-            ),
-            ElevatedButton(
-              onPressed: _submitForm,
-              child: Text('Gönder'),
-            ),
-            SizedBox(height: 20),
           ],
-        ),
-      ),
-
-      ],)
-
+        );
+      },
     );
   }
 
-  Widget _buildQuestionContainer(String question, TextEditingController controller) {
+  void _showAcceptionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Form gönderildi'),
+          content: Text('Formunuz başarıyla gönderildi.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Tamam'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDesktop = MediaQuery
+        .of(context)
+        .size
+        .width >= 1000;
+    final double sidePadding = isDesktop ? 200 : 30;
+
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: Color(0xFF3D1953).withOpacity(0.4),
+          title: Text('Modül 8'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+            ),
+          ],
+        ),
+        body: Stack(fit: StackFit.expand, children: [
+          Positioned.fill(
+            child: Image.asset(
+              'android/assets/arkaplan.png', // Arka plan resminizin yolu
+              fit: BoxFit.cover, // Resmi ekranı kaplayacak şekilde ölçekle
+            ),
+          ),
+          SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: sidePadding),
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 650),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF069BBF).withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: const Text(
+                    "İlk bölümü bitirdiniz. Buraya kadar devam ettiğiniz ve etkinlikleri yaptığınız için kendinizi tebrik"
+                        "edebilirsiniz."
+                        "Bu sayfada bitirmiş olduğunuz bu bölümü değerlendirmenizi istiyorum. Aşağıdaki sorular"
+                        "doğrultusunda değerlendirmenizi yapınız.",
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ),
+                SizedBox(height: 30),
+                // Sayfanın kaydırılabilir kısmı için boşluk
+                _buildQuestionContainer(
+                  "Bu bölümü okurken dikkatinizi en çok ne çekti? Sizin yaşadıklarınızla buradaki anlatılar benziyor mu? Benziyor ise neresi benziyor?",
+                  _controller1,
+                ),
+                SizedBox(height: 30),
+                _buildQuestionContainer(
+                  "Bu bölümü okurken dikkatinizi en çok ne çekti? Sizin yaşadıklarınızla buradaki anlatılar benziyor mu? Benziyor ise neresi benziyor?",
+                  _controller2,
+                ),
+                SizedBox(height: 30),
+                _buildQuestionContainer(
+                  "Bu bölümde öğrendiklerinizi kısaca belirtiniz. Bir kaç cümle ya da anahtar kelimelerle belirtebilirsiniz.",
+                  _controller3,
+                ),
+                SizedBox(height: 30),
+                _buildQuestionContainer(
+                  "Sormak istediğiniz sorular varsa aşağıya yazınız. Aklınıza her ne takılırsa mutlaka sorun.",
+                  _controller4,
+                ),
+                SizedBox(height: 30),
+                _buildOptionContainer(
+                  "Bu bölüm üzerinde ne kadar çalıştınız?",
+                  ['0-15 dk', '15-30 dk', '30-60 dk', '1-3 saat', '3-5 saat'],
+                ),
+                ElevatedButton(
+                  onPressed: _showConfirmationDialog,
+                  child: Text('Gönder'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Butonun arka plan rengi
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    textStyle: TextStyle(fontSize: 20),
+                  ),
+                ),
+                SizedBox(height: 30),
+              ],
+            ),
+          ),
+        ]));
+  }
+
+  Widget _buildQuestionContainer(String question,
+      TextEditingController controller) {
     return Container(
       constraints: BoxConstraints(maxWidth: 650),
       padding: EdgeInsets.all(20),
@@ -189,7 +245,7 @@ class _M8PageState extends State<M8Page> {
             question,
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 30),
           TextFormField(
             controller: controller,
             decoration: InputDecoration(
@@ -207,6 +263,15 @@ class _M8PageState extends State<M8Page> {
   }
 
   Widget _buildOptionContainer(String question, List<String> options) {
+    // Ekran genişliğini ölç
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+
+    // Ekran genişliğine göre boşluk ayarla
+    final dynamicSpacing = screenWidth * 0.0237; // Ekranın %2'si kadar boşluk
+
     return Container(
       constraints: BoxConstraints(maxWidth: 650),
       padding: EdgeInsets.all(20),
@@ -224,7 +289,7 @@ class _M8PageState extends State<M8Page> {
           ),
           const SizedBox(height: 10),
           Wrap(
-            spacing: 10.0,
+            spacing: dynamicSpacing, // Dinamik boşluk burada kullanılıyor
             children: options.map((option) {
               return ChoiceChip(
                 label: Text(option),
@@ -244,16 +309,5 @@ class _M8PageState extends State<M8Page> {
         ],
       ),
     );
-  }
-}
-
-class PageControllerProvider with ChangeNotifier {
-  Widget _currentPage = HomePage();
-
-  Widget get currentPage => _currentPage;
-
-  void changePage(Widget newPage) {
-    _currentPage = newPage;
-    notifyListeners();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'home_page.dart';
 import 'login.dart';
 import 'module_2.dart';
 import 'module_3.dart';
@@ -10,29 +9,35 @@ import 'module_6.dart';
 import 'module_7.dart';
 import 'module_8.dart';
 import 'module_table.dart';
-
+import 'password_forget.dart';
+import 'signupPage.dart';
+import 'profile.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        minWidth: 450,
+        defaultScale: true,
         breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ResponsiveBreakpoint.resize(450, name: MOBILE),
+          ResponsiveBreakpoint.resize(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ResponsiveBreakpoint.autoScale(2460, name: "4K"),
         ],
+        background: Container(color: Color(0xFFF5F5F5)),
       ),
-      home: M1Page(),
+      home: const M1Page(),
       routes: {
-        '/Home': (context) => HomePage(),
-        '/Login': (context) => LoginPage(),
+        '/Login': (context) => const LoginPage(),
         '/M1': (context) => const M1Page(),
         '/M2': (context) => M2Page(),
         '/M3T': (context) => const Mtable(),
@@ -43,7 +48,9 @@ class MyApp extends StatelessWidget {
         '/M7': (context) => const M7Page(),
         '/M8': (context) => const M8Page(),
         '/M0': (context) => const Mtable(),
-
+        '/P1': (context) => const passwordPage(),
+        '/S1': (context) => const Signup(),
+        '/P2': (context) => const ProfilePage(),
       },
     );
   }
@@ -68,29 +75,121 @@ class _M1PageState extends State<M1Page> {
 
   void _handleSubmit() {
     _submitForm();
-    Navigator.pushNamed(context, '/M2'); // M2 sayfasına yönlendirme
+    Navigator.pushReplacementNamed(context, '/M2'); // M2 sayfasına yönlendirme
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
-    final bool isDesktop = MediaQuery.of(context).size.width >= 1000;
+      bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+      bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
     final double sidePadding = isDesktop ? 200 : 30;
     final double horizontalPadding = isDesktop ? 200 : 0;
 
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF3D1953).withOpacity(0.4),
-        title: Text('Modül 1'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.home),
-            onPressed: () {
-              Navigator.pushNamed(context, '/Home'); // Ana sayfaya yönlendirme
-            },
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: isMobile
+              ? const Text('1. Bölüm 1. Sayfa')
+              : Row(
+            children: [
+              Image.asset(
+                'android/assets/goplogo.png',
+                height: 40,
+              ),
+              const SizedBox(width: 10),
+              const Text('1. Bölüm 1. Sayfa'),
+            ],
           ),
-        ],
-      ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.purple],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          centerTitle: true,
+          actions: isMobile
+              ? null
+              : [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/Login');
+              },
+              child: const Text(
+                  'Giriş Yap', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              child: const Text(
+                  'Ana Sayfa', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/M0');
+              },
+              child: const Text(
+                  '1. Bölüm 1. Sayfa', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/M6');
+              },
+              child: const Text(
+                  'Ekibimiz', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
+        endDrawer: isMobile
+            ? Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue, Colors.purple],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: const Text(
+                    'Menü', style: TextStyle(color: Colors.white, fontSize: 24)),
+              ),
+              ListTile(
+                title: const Text('Giriş Yap'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/Login');
+                },
+              ),
+              ListTile(
+                title: const Text('Ana Sayfa'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+              ),
+              ListTile(
+                title: const Text('Kendi Kendine Yardım'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/M0');
+                },
+              ),
+              ListTile(
+                title: const Text('Ekibimiz'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/M6');
+                },
+              ),
+            ],
+          ),
+        )
+            : null,
       body: Stack(
         children: [
           Positioned.fill(

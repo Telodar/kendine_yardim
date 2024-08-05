@@ -12,6 +12,7 @@ import 'module_8.dart';
 import 'module_table.dart';
 import 'password_forget.dart';
 import 'signupPage.dart';
+import 'profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,18 +24,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        minWidth: 450,
+        defaultScale: true,
         breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ResponsiveBreakpoint.resize(450, name: MOBILE),
+          ResponsiveBreakpoint.resize(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ResponsiveBreakpoint.autoScale(2460, name: "4K"),
         ],
+        background: Container(color: Color(0xFFF5F5F5)),
       ),
       home: const HomePage(),
       routes: {
-        '/Login': (context) => LoginPage(),
+        '/Login': (context) => const LoginPage(),
         '/M1': (context) => const M1Page(),
         '/M2': (context) => M2Page(),
         '/M3T': (context) => const Mtable(),
@@ -47,6 +51,7 @@ class MyApp extends StatelessWidget {
         '/M0': (context) => const Mtable(),
         '/P1': (context) => const passwordPage(),
         '/S1': (context) => const Signup(),
+        '/P2': (context) => const ProfilePage(),
       },
     );
   }
@@ -61,85 +66,231 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
+
+    Widget _buildTextContainer(double width, double height) {
+      return Container(
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.8),
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        constraints: BoxConstraints(
+          maxWidth: width,
+          maxHeight: height,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                'Kendi Kendine Yardım Nedir?',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'İnsanoğlu hayatı boyunca karşılaştığı farklı yaşam zorluklarıyla mücadele etmektedir. Çeşitli yaşam zorluklarıyla başa çıkabilmenin farklı yolları vardır, bunlardan en yaygını/önemlisi profesyonel bir yardım almaktır. Bu yardım içerisinde ilaçla tedavi ve psikoterapiler yer almaktadır. Bunların dışında yardım almanın önemli bir yolu da kendi kendine yardımdır.',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Kendi Kendine Yardım',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Kendi kendine yardım, kitaplar, kılavuzlar, ses dosyaları, videolar ve ya bu formatların bazı kombinasyonlarını kullanarak kişinin kendisi tarafından yürütülen yardım türüdür (Gould ve Clum, 1993). Kişinin bu süreci tamamlaması için uzmanla temas şart değildir: fakat bu çalışmak kapsamında bir uzman destekleyici ve kolaylaştırıcı olmak amacıyla sizinle haftalık olarak mail ya da telefonla iletişim sağlayacaktır.',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Bu Kılavuzdan Nasıl Yararlanacağım?',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Bu kılavuz Kabul ve Kararlılık Terapisi (KKT) ilke, yöntem ve tekniklerine dayalı olarak hazırlanmıştır. Kılavuz içerisinde depresif duygu durum, kaygı ve stres sorunlarında etkili olduğu daha önce kanıtlanmış yöntem ve teknikleri barındırmaktadır.',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Kılavuz İçeriği',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Bu kılavuz, içerisindeki bilgileri sadece okuyup geçebileceğiniz bir kılavuz değildir: aksine içerisinde yer alan alıştırmaları ve egzersizleri o an ve sonrasında günlük hayatınızda gerçekleştireceğiniz bir yol arkadaşıdır. Bu süreç aslında bir enstrüman çalmayı öğrenmek gibidir. Nasıl bir gitarın çalınacağını okuyarak ya da birinin bize anlatması ile öğrenemiyor ve egzersiz yapmaya ihtiyaç duyuyorsak, burada da notaları birlikte öğrenerek ve egzersiz sayesinde gitar çalmaya başlayabilirsiniz.',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Alıştırmalar',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Buradaki alıştırmaları gerçekleştirebilmeniz için şartları olabildiğince sizin açınızdan daha rahat uygulanabilir hale getirmeye çalışıyoruz. Bazı alıştırmaların içerisinde karekodlar göreceksiniz ve bu karekodlar sizi alıştırmanın sesli dosyasına ulaştırmak içindir. O karekod sayesinde alıştırmayı sesli dinleyerek gerçekleştirebilirsiniz.',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Zorluklar ve Kolaylaştırıcılar',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Başlangıçta bu alıştırmaları gerçekleştirmek bazılarımız için zorlayıcı olabilir fakat bu alıştırmaları yapmaya devam ettikçe uygulamanın kolaylaştığını fark edebilirsiniz.',
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Hatırlatma',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Bu kitaptaki kavramlar ve stratejiler kişisel gelişiminize yardımcı olabilse de bu kitabın tıbbi tavsiye içermediğini ve psikoterapi ve ya tıbbi tedavinin yerini alma amacı taşımadığını hatırlatmak istiyoruz. Eğer yaşadığınız durumun daha ciddi düzeyde olduğunu düşünüyorsanız bir ruh sağlığı uzmanına başvurunuz.',
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF3D1953).withOpacity(0.4),
-        title: Row(
+        title: isMobile
+            ? const Text('Kendine Yardım')
+            : Row(
           children: [
             Image.asset(
               'android/assets/goplogo.png',
-              fit: BoxFit.contain,
-              height: 32,
+              height: 40,
             ),
-            SizedBox(width: 8),
-            Text('Kendine Yardım'),
+            const SizedBox(width: 10),
+            const Text('Kendine Yardım'),
           ],
         ),
-        actions: [
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.purple],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        centerTitle: true,
+        actions: isMobile
+            ? null
+            : [
           TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/Login');
+              Navigator.pushReplacementNamed(context, '/Login');
             },
-            child: Text('Giriş Yap', style: TextStyle(color: Colors.white)),
+            child: const Text(
+                'Giriş Yap', style: TextStyle(color: Colors.white)),
           ),
-          IconButton(
-            icon: Icon(Icons.home),
+          const SizedBox(width: 8),
+          TextButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/Home');
+              Navigator.pushReplacementNamed(context, '/');
             },
+            child: const Text(
+                'Ana Sayfa', style: TextStyle(color: Colors.white)),
           ),
-          IconButton(
-            icon: Icon(Icons.menu),
+          const SizedBox(width: 8),
+          TextButton(
             onPressed: () {
-              _scaffoldKey.currentState!.openEndDrawer();
+              Navigator.pushReplacementNamed(context, '/M0');
             },
+            child: const Text(
+                'Kendi Kendine Yardım', style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/M1');
+            },
+            child: const Text(
+                'Ekibimiz', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
-      endDrawer: Drawer(
+      endDrawer: isMobile
+          ? Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: <Widget>[
+          children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Color(0xFF3D1953).withOpacity(0.5),
-              ),
-              child: Text(
-                'Gazi Osman Paşa Üniversitesi Kendine Yardım Portalı',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+                gradient: LinearGradient(
+                  colors: [Colors.green, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
               ),
+              child: const Text(
+                  'Menü', style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profil'),
+              title: const Text('Giriş Yap'),
               onTap: () {
-                Navigator.pushNamed(context, '/M1');
+                Navigator.pushReplacementNamed(context, '/Login');
               },
             ),
             ListTile(
-              leading: Icon(Icons.view_module),
-              title: Text('Modüller'),
+              title: const Text('Ana Sayfa'),
               onTap: () {
-                Navigator.pushNamed(context, '/M1');
+                Navigator.pushReplacementNamed(context, '/');
               },
             ),
             ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Mesajlar'),
+              title: const Text('Kendi Kendine Yardım'),
               onTap: () {
-                Navigator.pushNamed(context, '/M3');
+                Navigator.pushReplacementNamed(context, '/M0');
+              },
+            ),
+            ListTile(
+              title: const Text('Ekibimiz'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/M1');
               },
             ),
           ],
         ),
-      ),
+      )
+          : null,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -147,131 +298,115 @@ class _HomePageState extends State<HomePage> {
             'android/assets/arkaplan.png',
             fit: BoxFit.cover,
           ),
-          Expanded(
-            child: Scrollbar(
-              child: SingleChildScrollView(
+          Scrollbar(
+            controller: _scrollController,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 30),
-                    Container(
-                      padding: EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Image.asset(
-                        'android/assets/goplogo.png',
-                        height: 250, // Logo boyutunu ayarlayın
-                      ),
-                    ),
-                    SizedBox(height: 30), // Logo ve metin kutusu arasındaki boşluk
-                    Container(
-                      padding: EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      constraints: BoxConstraints(
-                        maxWidth: 650, // Metin kutusunun genişliğini sınırlayabilirsiniz
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    const SizedBox(height: 30),
+                    if (isMobile)
+                      Center (
+                        child:
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Kendi Kendine Yardım Nedir?',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                          Container(
+
+                            padding: const EdgeInsets.all(20.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(15.0),
+
+                            ),
+                            child: Image.asset(
+                              'android/assets/goplogo.png',
+                              height: 250,
                             ),
                           ),
-                          SizedBox(height: 8),
-                          Text(
-                            'İnsanoğlu hayatı boyunca karşılaştığı farklı yaşam zorluklarıyla mücadele etmektedir. Çeşitli yaşam zorluklarıyla başa çıkabilmenin farklı yolları vardır, bunlardan en yaygını/önemlisi profesyonel bir yardım almaktır. Bu yardım içerisinde ilaçla tedavi ve psikoterapiler yer almaktadır. Bunların dışında yardım almanın önemli bir yolu da kendi kendine yardımdır.',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Kendi Kendine Yardım',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Kendi kendine yardım, kitaplar, kılavuzlar, ses dosyaları, videolar ve ya bu formatların bazı kombinasyonlarını kullanarak kişinin kendisi tarafından yürütülen yardım türüdür (Gould ve Clum, 1993). Kişinin bu süreci tamamlaması için uzmanla temas şart değildir: fakat bu çalışmak kapsamında bir uzman destekleyici ve kolaylaştırıcı olmak amacıyla sizinle haftalık olarak mail ya da telefonla iletişim sağlayacaktır.',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Bu Kılavuzdan Nasıl Yararlanacağım?',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Bu kılavuz Kabul ve Kararlılık Terapisi (KKT) ilke, yöntem ve tekniklerine dayalı olarak hazırlanmıştır. Kılavuz içerisinde depresif duygu durum, kaygı ve stres sorunlarında etkili olduğu daha önce kanıtlanmış yöntem ve teknikleri barındırmaktadır.',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Kılavuz İçeriği',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Bu kılavuz, içerisindeki bilgileri sadece okuyup geçebileceğiniz bir kılavuz değildir: aksine içerisinde yer alan alıştırmaları ve egzersizleri o an ve sonrasında günlük hayatınızda gerçekleştireceğiniz bir yol arkadaşıdır. Bu süreç aslında bir enstrüman çalmayı öğrenmek gibidir. Nasıl bir gitarın çalınacağını okuyarak ya da birinin bize anlatması ile öğrenemiyor ve egzersiz yapmaya ihtiyaç duyuyorsak, burada da notaları birlikte öğrenerek ve egzersiz sayesinde gitar çalmaya başlayabilirsiniz.',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Alıştırmalar',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Buradaki alıştırmaları gerçekleştirebilmeniz için şartları olabildiğince sizin açınızdan daha rahat uygulanabilir hale getirmeye çalışıyoruz. Bazı alıştırmaların içerisinde karekodlar göreceksiniz ve bu karekodlar sizi alıştırmanın sesli dosyasına ulaştırmak içindir. O karekod sayesinde alıştırmayı sesli dinleyerek gerçekleştirebilirsiniz.',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Zorluklar ve Kolaylaştırıcılar',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Başlangıçta bu alıştırmaları gerçekleştirmek bazılarımız için zorlayıcı olabilir fakat bu alıştırmaları yapmaya devam ettikçe uygulamanın kolaylaştığını fark edebilirsiniz.',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Hatırlatma',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Bu kitaptaki kavramlar ve stratejiler kişisel gelişiminize yardımcı olabilse de bu kitabın tıbbi tavsiye içermediğini ve psikoterapi ve ya tıbbi tedavinin yerini alma amacı taşımadığını hatırlatmak istiyoruz. Eğer yaşadığınız durumun daha ciddi düzeyde olduğunu düşünüyorsanız bir ruh sağlığı uzmanına başvurunuz.',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                          const SizedBox(height: 20),
+                          _buildTextContainer(600, 600),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 30),
+                      )
+                    else
+                      SingleChildScrollView(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.all(16.0), // Pencere kenarlarından uzaklık
+                        child: Column( // Tek Sütun gibi davranış
+                          children: [
+                            Row(
+                              // üst Satır
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Sol kutu
+                                Expanded(
+                                  flex: 6,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(50), // Kutu İçerik arası mesafe
+                                    child: Container(
+                                      padding: const EdgeInsets.all(120.0), // Kutu İçerik arası mesafe
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.8),
+                                        borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                                      child: Image.asset(
+                                        'android/assets/goplogo.png',
+                                        height: 250,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                // Sağ kutu
+                                Expanded(
+                                  flex: 6,
+                                  child: Container(
+                                    margin: const EdgeInsets.all(50.0), //kutular arası boşluk
+                                    child: _buildTextContainer(double.infinity, 500),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 30),
+                            Row(
+                              // Alt satır
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(50.0), // Kutular arasında boşluk
+                                    child: _buildTextContainer(400, 500),
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(50), // Kutu İçerik arası mesafe
+                                    child: Container(
+                                      padding: const EdgeInsets.all(120.0), // Kutu İçerik arası mesafe
+                                      decoration: BoxDecoration(
+                                        color: Colors.white.withOpacity(0.8),
+                                        borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                                      child: Image.asset(
+                                        'android/assets/goplogo.png',
+                                        height: 250,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+
+
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),

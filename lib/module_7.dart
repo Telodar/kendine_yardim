@@ -10,7 +10,7 @@ import 'module_3.dart';
 import 'module_4.dart';
 import 'module_5.dart';
 import 'module_6.dart';
-
+//#TODO: Yeni Appbar
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
@@ -20,14 +20,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        maxWidth: 1200,
+        minWidth: 450,
+        defaultScale: true,
         breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ResponsiveBreakpoint.resize(450, name: MOBILE),
+          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ResponsiveBreakpoint.autoScale(2460, name: "4K"),
         ],
+        background: Container(color: Color(0xFFF5F5F5)),
       ),
       home: const M7Page(),
       routes: {
@@ -112,7 +116,7 @@ class _M7PageState extends State<M7Page> {
           IconButton(
             icon: const Icon(Icons.home),
             onPressed: () {
-              Navigator.pushNamed(context, '/Home');
+              Navigator.pushReplacementNamed(context, '/Home');
             },
           ),
 
@@ -214,7 +218,7 @@ class _M7PageState extends State<M7Page> {
                 // "Devam Et" butonu
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/M8');
+                    Navigator.pushReplacementNamed(context, '/M8');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white, // Butonun arka plan rengi

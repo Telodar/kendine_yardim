@@ -9,7 +9,7 @@ import 'module_4.dart';
 import 'module_6.dart';
 import 'module_7.dart';
 import 'module_table.dart';
-
+//#TODO:
 void main() {
   runApp(MyApp());
 }
@@ -18,14 +18,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        maxWidth: 1200,
+        minWidth: 450,
+        defaultScale: true,
         breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ResponsiveBreakpoint.resize(450, name: MOBILE),
+          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ResponsiveBreakpoint.autoScale(2460, name: "4K"),
         ],
+        background: Container(color: Color(0xFFF5F5F5)),
       ),
       home: const M5Page(),
       routes: {
@@ -73,7 +77,7 @@ class _M5PageState extends State<M5Page> {
     _controller5.clear();
 
     // Formu gönderdikten sonra M6Page'e yönlendirme
-    Navigator.pushNamed(context, '/M6');
+    Navigator.pushReplacementNamed(context, '/M6');
   }
 
   @override
@@ -90,7 +94,7 @@ class _M5PageState extends State<M5Page> {
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
-              Navigator.pushNamed(context, '/Home');
+              Navigator.pushReplacementNamed(context, '/Home');
             },
           ),
         ],
@@ -104,7 +108,7 @@ class _M5PageState extends State<M5Page> {
               fit: BoxFit.cover, // Resmi ekranı kaplayacak şekilde ölçekle
             ),
           ),
-          Expanded(
+          Container(
             child: SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: sidePadding),
               child: ConstrainedBox(

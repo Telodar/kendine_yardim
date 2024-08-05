@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'home_page.dart';
 import 'module_4.dart';
+//#TODO: Yeni Appbar
 
 void main() {
   runApp(MyApp());
@@ -13,14 +14,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        maxWidth: 1200,
+        minWidth: 450,
+        defaultScale: true,
         breakpoints: [
-          const Breakpoint(start: 0, end: 450, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ResponsiveBreakpoint.resize(450, name: MOBILE),
+          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ResponsiveBreakpoint.autoScale(2460, name: "4K"),
         ],
+        background: Container(color: Color(0xFFF5F5F5)),
       ),
       home: const Mtable(),
       routes: {
@@ -65,7 +70,7 @@ class _MtableState extends State<Mtable> {
     _controller6.clear();
     _controller7.clear();
 
-    Navigator.pushNamed(context, '/M4');
+    Navigator.pushReplacementNamed(context, '/M4');
   }
 
   @override
@@ -82,7 +87,7 @@ class _MtableState extends State<Mtable> {
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
-              Navigator.pushNamed(context, '/Home');
+              Navigator.pushReplacementNamed(context, '/');
             },
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test3/password_forget.dart';
 import 'home_page.dart';
+//#TODO: Yeni Appbar
 
 void main() => runApp(const MyApp());
 
@@ -11,9 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Login Page',
-      home: const Signup(),
+      home: const HomePage(),
       routes: {
-        '/Home':(context)=> const HomePage(),
         '/P1': (context) => const passwordPage(),
 
       },
@@ -57,7 +57,7 @@ class _SignupState extends State<Signup> {
           IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
-              Navigator.pushNamed(context, '/Home'); // Ana sayfaya yönlendirme
+              Navigator.pushReplacementNamed(context, '/'); // Ana sayfaya yönlendirme
             },
           ),
         ],

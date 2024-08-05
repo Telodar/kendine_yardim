@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:test3/password_forget.dart';
-import 'package:test3/signupPage.dart';
-import 'home_page.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'module_1.dart';
+import 'module_2.dart';
+import 'module_3.dart';
+import 'module_4.dart';
+import 'module_5.dart';
+import 'module_6.dart';
+import 'module_7.dart';
+import 'module_8.dart';
+import 'module_table.dart';
+import 'password_forget.dart';
+import 'signupPage.dart';
+import 'profile.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,13 +23,34 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login Page',
+      builder: (context, child) => ResponsiveWrapper.builder(
+        child,
+        minWidth: 450,
+        defaultScale: true,
+        breakpoints: [
+          ResponsiveBreakpoint.resize(450, name: MOBILE),
+          ResponsiveBreakpoint.resize(800, name: TABLET),
+          ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+          ResponsiveBreakpoint.autoScale(2460, name: "4K"),
+        ],
+        background: Container(color: Color(0xFFF5F5F5)),
+      ),
       home: const LoginPage(),
       routes: {
-        '/Home': (context) => const HomePage(),
+        '/Login': (context) => const LoginPage(),
+        '/M1': (context) => const M1Page(),
+        '/M2': (context) => M2Page(),
+        '/M3T': (context) => const Mtable(),
+        '/M3': (context) => const M3Page(),
+        '/M5': (context) => const M5Page(),
+        '/M4': (context) => const M4Page(),
+        '/M6': (context) => const M6Page(),
+        '/M7': (context) => const M7Page(),
+        '/M8': (context) => const M8Page(),
+        '/M0': (context) => const Mtable(),
         '/P1': (context) => const passwordPage(),
         '/S1': (context) => const Signup(),
-        '/M1': (context) => const M1Page(),
+        '/P2': (context) => const ProfilePage(),
       },
     );
   }
@@ -47,226 +79,269 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF069BBF).withOpacity(0.4),
-        title: Text('Kendine Yardım'),
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0), // Logo etrafına boşluk eklemek için
-          child: Image.asset('android/assets/goplogo.png'),
+        title: isMobile
+            ? const Text('Kendine Yardım')
+            : Row(
+          children: [
+            Image.asset(
+              'android/assets/goplogo.png',
+              height: 40,
+            ),
+            const SizedBox(width: 10),
+            const Text('Kendine Yardım'),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.home),
-            onPressed: () {
-              Navigator.pushNamed(context, '/Home'); // Ana sayfaya yönlendirme
-            },
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.purple],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-          IconButton(
-            icon: Icon(Icons.menu),
+        ),
+        centerTitle: true,
+        actions: isMobile
+            ? null
+            : [
+          TextButton(
             onPressed: () {
-              _scaffoldKey.currentState!.openEndDrawer(); // Drawer'ı sağ taraftan aç
+              Navigator.pushReplacementNamed(context, '/Login');
             },
+            child: const Text(
+                'Giriş Yap', style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
+            child: const Text(
+                'Ana Sayfa', style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/M0');
+            },
+            child: const Text(
+                'Kendi Kendine Yardım', style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/M6');
+            },
+            child: const Text(
+                'Ekibimiz', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
-      endDrawer: Drawer(
+      endDrawer: isMobile
+          ? Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: <Widget>[
+          children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Color(0xFF069BBF).withOpacity(0.6),
-              ),
-              child: Text(
-                'Modüller',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
+                gradient: LinearGradient(
+                  colors: [Colors.blue, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
               ),
+              child: const Text(
+                  'Menü', style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profil'),
+              title: const Text('Giriş Yap'),
               onTap: () {
-                Navigator.pushNamed(context, ''); // Mesajlar sayfasına git fonksiyonu
+                Navigator.pushReplacementNamed(context, '/Login');
               },
             ),
             ListTile(
-              leading: Icon(Icons.view_module),
-              title: Text('Modüller'),
+              title: const Text('Ana Sayfa'),
               onTap: () {
-                Navigator.pushNamed(context, '/M1'); // Profil sayfasına git fonksiyonu
+                Navigator.pushReplacementNamed(context, '/');
               },
             ),
             ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Mesajlar'),
+              title: const Text('Kendi Kendine Yardım'),
               onTap: () {
-                Navigator.pushNamed(context, '/M3'); // Ayarlar sayfasına git fonksiyonu
+                Navigator.pushReplacementNamed(context, '/M0');
+              },
+            ),
+            ListTile(
+              title: const Text('Ekibimiz'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/M6');
               },
             ),
           ],
         ),
-      ),
-      body: Stack(
-        children: [
-          // Arka plan resmi
-          Positioned.fill(
-            child: Image.asset(
-              'android/assets/arkaplan.png',
-              fit: BoxFit.cover,
+      )
+          : null,
+        body: Stack(
+          children: [
+            // Arka plan resmi
+            Positioned.fill(
+              child: Image.asset(
+                'android/assets/arkaplan.png',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          // Form container
-          Align(
-            alignment: Alignment(0.8, 0), // Sağa hizalama
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                double width = constraints.maxWidth * 0.8;
-                double minWidth = 500;
-                double maxWidth = 450;
+            // Form container
+            Align(
+              alignment: Alignment(0.8, 0), // Sağa hizalama
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  double width = constraints.maxWidth * 0.8;
+                  double minWidth = 500;
+                  double maxWidth = 450;
 
-                return Container(
-                  width: width < minWidth
-                      ? minWidth
-                      : (width > maxWidth ? maxWidth : width),
-                  padding: const EdgeInsets.all(30),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF069BBF).withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(17),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: width < minWidth
-                                ? minWidth
-                                : (width > maxWidth ? maxWidth : width),
-                            minHeight: 60,
-                          ),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: "Kullanıcı Adı",
-                              labelStyle: TextStyle(color: Colors.white70),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.blueGrey, width: 1.0),
-                              ),
-                              filled: true,
-                              fillColor: Colors.transparent,
-                            ),
-                            style: TextStyle(color: Colors.white70),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Kullanıcı Adını Giriniz";
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              username = value!;
-                            },
-                            onFieldSubmitted: (value) {
-                              _submitForm();
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: width < minWidth
-                                ? minWidth
-                                : (width > maxWidth ? maxWidth : width),
-                            minHeight: 60,
-                          ),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: "Parola",
-                              labelStyle: TextStyle(color: Colors.white70),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.blueGrey, width: 1.0),
-                              ),
-                              filled: true,
-                              fillColor: Colors.transparent,
-                            ),
-                            style: TextStyle(color: Colors.white70),
-                            obscureText: true,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Parolayı Giriniz";
-                              }
-                              return null;
-                            },
-                            onSaved: (value) {
-                              password = value!;
-                            },
-                            onFieldSubmitted: (value) {
-                              _submitForm();
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: width < minWidth
-                                ? minWidth
-                                : (width > maxWidth ? maxWidth : width),
-                            minHeight: 50,
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              backgroundColor: Color(0xFF3D1953), // Set the button color here
-                              foregroundColor: Colors.white, // Set the text color here
-                            ),
-                            onPressed: _submitForm,
-                            child: const Text("Giriş yap"),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // orta hiza
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/S1'); // Üye ol butonu tıklama işlemleri
-                              },
-                              child: Text(
-                                "Üye Ol",
-                                style: TextStyle(color: Colors.white), // Set the text color here
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/P1'); // Şifremi unuttum butonu tıklama işlemleri
-                              },
-                              child: Text(
-                                "Şifremi Unuttum",
-                                style: TextStyle(color: Colors.white), // Set the text color here
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                  return Container(
+                    width: width < minWidth
+                        ? minWidth
+                        : (width > maxWidth ? maxWidth : width),
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: Color(0xFF069BBF).withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(17),
                     ),
-                  ),
-                );
-              },
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: width < minWidth
+                                  ? minWidth
+                                  : (width > maxWidth ? maxWidth : width),
+                              minHeight: 60,
+                            ),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: "Kullanıcı Adı",
+                                labelStyle: TextStyle(color: Colors.white70),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.blueGrey, width: 1.0),
+                                ),
+                                filled: true,
+                                fillColor: Colors.transparent,
+                              ),
+                              style: TextStyle(color: Colors.white70),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Kullanıcı Adını Giriniz";
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                username = value!;
+                              },
+                              onFieldSubmitted: (value) {
+                                _submitForm();
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: width < minWidth
+                                  ? minWidth
+                                  : (width > maxWidth ? maxWidth : width),
+                              minHeight: 60,
+                            ),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: "Parola",
+                                labelStyle: TextStyle(color: Colors.white70),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.blueGrey, width: 1.0),
+                                ),
+                                filled: true,
+                                fillColor: Colors.transparent,
+                              ),
+                              style: TextStyle(color: Colors.white70),
+                              obscureText: true,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Parolayı Giriniz";
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                password = value!;
+                              },
+                              onFieldSubmitted: (value) {
+                                _submitForm();
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: width < minWidth
+                                  ? minWidth
+                                  : (width > maxWidth ? maxWidth : width),
+                              minHeight: 50,
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                                backgroundColor: Color(0xFF3D1953), // Set the button color here
+                                foregroundColor: Colors.white, // Set the text color here
+                              ),
+                              onPressed: _submitForm,
+                              child: const Text("Giriş yap"),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween, // orta hiza
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(context, '/S1'); // Üye ol butonu tıklama işlemleri
+                                },
+                                child: Text(
+                                  "Üye Ol",
+                                  style: TextStyle(color: Colors.white), // Set the text color here
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(context, '/P1'); // Şifremi unuttum butonu tıklama işlemleri
+                                },
+                                child: Text(
+                                  "Şifremi Unuttum",
+                                  style: TextStyle(color: Colors.white), // Set the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        )
     );
   }
 }
