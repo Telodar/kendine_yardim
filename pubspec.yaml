@@ -62,7 +62,10 @@ flutter:
     - android\assets\Module_3_1.png
     - android\assets\module6.png
     - android\assets\module6_1.png
+    - android\assets\module6_2.png
     - android\assets\goplogo.png
+    - android\assets\help.png
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

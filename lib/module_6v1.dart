@@ -15,7 +15,9 @@ import 'signupPage.dart';
 import 'profile.dart';
 import 'home_page.dart';
 import 'package:photo_view/photo_view.dart';
+import 'module_6v2.dart';
 
+//#TODO: Diğer Text ve fotoğraf içeren modüllerin de aynı düzlemde güncellenmesi
 
 void main() {
   runApp(const MyApp());
@@ -49,6 +51,8 @@ class MyApp extends StatelessWidget {
         '/M5': (context) => const M5Page(),
         '/M4': (context) => const M4Page(),
         '/M6': (context) => const M6Page(),
+        '/M61': (context) => const M6v1Page(),
+        '/M62': (context) => const M6v2Page(),
         '/M7': (context) => const M7Page(),
         '/M8': (context) => const M8Page(),
         '/M0': (context) => const Mtable(),
@@ -60,17 +64,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class M3Page extends StatefulWidget {
-  const M3Page({super.key});
+class M6v1Page extends StatefulWidget {
+  const M6v1Page({super.key});
 
   @override
-  State<M3Page> createState() => _M3PageState();
+  State<M6v1Page> createState() => _M6v1PageState();
 }
 
-class _M3PageState extends State<M3Page> {
+class _M6v1PageState extends State<M6v1Page> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController _textController = TextEditingController();
 
   void _showPhoto(BuildContext context, String imagePath) {
     Navigator.push(
@@ -104,73 +107,37 @@ class _M3PageState extends State<M3Page> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 8),
               Text(
-                "Belki hayatınız ile Ayşe’nin hayatı arasında bazı benzerlikleri ve farklılıkları görmüşsünüz. Çalışmanın bu"
-                    "kısmında Ayşe’nin yaşadığı durumlardaki davranışlarını birlikte analiz edelim. Sonra da siz yaşadığınız"
-                    "durumlarda kendi davranışlarınızın analizini yapabileceksiniz.",
-                style: TextStyle(color: Colors.black, fontSize: 20),
-              ),
-              SizedBox(height: 20), // Metin ile resim arasında 20 piksel boşluk
-              Container(
-                width: 650,
-                height: 365, // En-boy oranını korumak için uygun yüksekliği ayarlayın
-                child: GestureDetector(
-                  onTap: () => _showPhoto(context, 'android/assets/Module_3.png'),
-                  child: Image.asset(
-                    'android/assets/Module_3.png',
-                    fit: BoxFit.contain, // Resmin oranını koruyarak görüntüle
-                  ),
-                ),
-              ),
-            ]
+              "Bir de süreci daha iyi anlayabilmek için uçurumun kenarındaki canavara bakalım.",
+          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-      ),
-    );
-  }
-  Widget _buildTextContainer2 (double width, double height) {
-    return Container(
-      padding: const EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      constraints: BoxConstraints(
-        maxWidth: width,
-        maxHeight: height,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 8),
+              SizedBox(height: 20),
               Text(
-                "Şimdi odaklanmaya karar verdiğiniz sorun üzerinde duralım. Bu sorunu en son ne zaman ve nerede"
-                    "yaşadınız? Öncelikle olayla ilgili A sütununda yazılı olan soruları altına cevaplarını yazınız. Daha sonra"
-                    "bütün bu duygu düşünce ve bedensel hisler geldiğinde ne yaptığınızı B sütununa yazın. Daha sonra"
-                    "bu olayın kısa ve uzun vadede ne gibi sonuçlar ortaya çıkardığını da C sütununa yazınız.",
+                    "Bir uçurumun kenarındasınız ve uçurumun diğer tarafında bir canavar var. Uçurumun ortasında bir"
+                    "halat var. Bir ucunu siz diğer tarafını bu canavar tutuyor. Canavardan kurtulmak için onu"
+                    "uçurumdan aşağı düşürmek gerekiyor. Halatı hızlıca çekerek canavarı uçurumdan aşağı düşürmek"
+                    "istiyorsunuz ve halatı var gücünüzle çekiyorsunuz fakat siz halatı ne kadar güçlü çekerseniz"
+                    "karşıdaki canavar da aynı güçte halatı çekmeye başlıyor. Bazen yoruluyorsunuz, titriyorsunuz"
+                    "canavar sizi uçurumun kenarına getiriyor sonra tekrar asılıp çekmeye devam ediyorsunuz. Siz"
+                    "halatı çektikçe canavar daha da güçleniyor o da kuvvetlice çekiyor. Bu durumda ne yapabilirsiniz?"
+                    "Unutmayın daha güçlü çektiğinizde o da aynı güçle çekiyor. Halatı çekmeye devam ederken o"
+                    "sırada hayatınızda olanlarla ilgilenemiyor dikkatinizi sadece halatı çekmeye verebiliyorsunuz."
+                    "Arkadaşlarınızla, ailenizle vakit geçiremiyor, geçirseniz bile o sırada halatı çekmeye devam"
+                    "ediyorsunuz. Onlarla vakit geçirmek istiyorsunuz ya da derslerine odaklanmak istiyorsunuz ama"
+                    "aynı zamanda içinde bulunduğun bir halat çekme yarışına da sahipsiniz ve onu da kazanmayı çok"
+                    "istiyorsunuz. Daha ne kadar bu mücadeleye devam edebilirsiniz?",
                 style: TextStyle(color: Colors.black, fontSize: 20),
               ),
-              SizedBox(height: 20),
-              Container(
-                width: 650,
-                height: 365, // En-boy oranını korumak için uygun yüksekliği ayarlayın
-                child: GestureDetector(
-                  onTap: () => _showPhoto(context, 'android/assets/Module_3_1.png'),
-                  child: Image.asset(
-                    'android/assets/Module_3_1.png',
-                    fit: BoxFit.contain, // Resmin oranını koruyarak görüntüle
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/M0');
-                },
-                child: Text('Başla'),
-              ),
-              SizedBox(height: 50),
+              SizedBox(height: 16),
+              Center(
+                  child:ElevatedButton
+                    (
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/M62');
+                      },
+                      child: Text('Devam et')
+                  )
+              )
             ]
         ),
       ),
@@ -182,12 +149,12 @@ class _M3PageState extends State<M3Page> {
     bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
     bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
     final double sidePadding = isDesktop ? 200 : 30;
-    
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: isMobile
-            ? const Text('1. Bölüm 3. Sayfa')
+            ? const Text('Kendine Yardım')
             : Row(
           children: [
             Image.asset(
@@ -195,13 +162,13 @@ class _M3PageState extends State<M3Page> {
               height: 40,
             ),
             const SizedBox(width: 10),
-            const Text('1. Bölüm 1. Sayfa'),
+            const Text('Kendine Yardım'),
           ],
         ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.purple],
+              colors: [Colors.green, Colors.purple],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -213,17 +180,34 @@ class _M3PageState extends State<M3Page> {
             : [
           TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.pushReplacementNamed(context, '/Login');
             },
-            child: const Text(
-                'Kaydet & Ara Ver', style: TextStyle(color: Colors.white)),
+            child: const Text('Giriş Yap',
+                style: TextStyle(color: Colors.white)),
           ),
+          const SizedBox(width: 8),
           TextButton(
             onPressed: () {
               Navigator.pushReplacementNamed(context, '/');
             },
-            child: const Text(
-                'Kaydetmeden Çık', style: TextStyle(color: Colors.white)),
+            child: const Text('Ana Sayfa',
+                style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/M0');
+            },
+            child: const Text('Kendi Kendine Yardım',
+                style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/M1');
+            },
+            child: const Text('Ekibimiz',
+                style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -235,24 +219,37 @@ class _M3PageState extends State<M3Page> {
             DrawerHeader(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.blue, Colors.purple],
+                  colors: [Colors.green, Colors.purple],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: const Text(
-                  'Menü', style: TextStyle(color: Colors.white, fontSize: 24)),
+              child: const Text('Menü',
+                  style:
+                  TextStyle(color: Colors.white, fontSize: 24)),
             ),
             ListTile(
-              title: const Text('Kaydet & Ara Ver'),
+              title: const Text('Giriş Yap'),
               onTap: () {
                 Navigator.pushReplacementNamed(context, '/Login');
               },
             ),
             ListTile(
-              title: const Text('Kaydetmeden Çık'),
+              title: const Text('Ana Sayfa'),
               onTap: () {
                 Navigator.pushReplacementNamed(context, '/');
+              },
+            ),
+            ListTile(
+              title: const Text('Kendi Kendine Yardım'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/M0');
+              },
+            ),
+            ListTile(
+              title: const Text('Ekibimiz'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/M1');
               },
             ),
           ],
@@ -262,50 +259,39 @@ class _M3PageState extends State<M3Page> {
       body: Stack(
         fit: StackFit.expand,
         children: [
+
+
           if (isMobile)
             Center(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: sidePadding),
                 child: Column(
                   children: [
+                    SizedBox( height: 40),
+                    Container(
+
+                      constraints: BoxConstraints(maxWidth: 650),
+                      child: GestureDetector(
+                        onTap: () =>
+                            _showPhoto(context, 'android/assets/module6_1.png'),
+                        child: Image.asset(
+                          'android/assets/module6_1.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 20),
                     Container(
-                      constraints: BoxConstraints(maxWidth: 700),
+                      constraints: BoxConstraints(maxWidth: 650),
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: Colors.white70.withOpacity(0.8),
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      child: _buildTextContainer(3000, 3000),
+                      child: _buildTextContainer(2000, 2000),
                     ),
                     SizedBox(height: 20),
-                    Container(
-                      constraints: BoxConstraints(maxWidth: 650),
-                      child:
-                      Center(
-                      child: GestureDetector(
-                        onTap: () =>
-                            _showPhoto(context, 'android/assets/module6.png'),
-                        child: Image.asset(
-                          'android/assets/module6.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                    ),
-                    SizedBox(height: 30),
 
-                      Container(
-                        constraints: BoxConstraints(maxWidth: 700),
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white70.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: _buildTextContainer2(3000, 3000),
-                      ),
-
-                    SizedBox(height: 30),
                   ],
                 ),
               ),
@@ -324,26 +310,20 @@ class _M3PageState extends State<M3Page> {
                         horizontal: MediaQuery.of(context).size.width * 0.02,
                         vertical: MediaQuery.of(context).size.height * 0.02,
                       ),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.85,
-                            constraints: BoxConstraints(),
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.0),
-                              color: Colors.white.withOpacity(0.8),
-                            ),
-                            child: Center(
-                              child: _buildTextContainer(1000, 1000),
-                            ),
-                          ),
-                          // Biraz boşluk eklemek isterseniz
-                        ],
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.85,
+                        constraints: BoxConstraints(maxWidth: 650),
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Colors.white.withOpacity(0.8), // Added for consistency
+                        ),
+                        child: Center(
+                          child: _buildTextContainer(1000,1000),
+                        ),
                       ),
                     ),
                   ),
-
                   Expanded(
                     flex: 1,
                     child: Padding(
@@ -351,22 +331,26 @@ class _M3PageState extends State<M3Page> {
                         horizontal: MediaQuery.of(context).size.width * 0.02,
                         vertical: MediaQuery.of(context).size.height * 0.02,
                       ),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.85,
-                            constraints: BoxConstraints(),
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.0),
-                              color: Colors.white.withOpacity(0.8),
-                            ),
-                            child: Center(
-                              child: _buildTextContainer2(1000, 1000),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.85,
+                        padding: const EdgeInsets.all(1.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: GestureDetector(
+                          onTap: () => _showPhoto(context, 'android/assets/module6_1.png'),
+                          child: Center(
+                            child: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              child: Image.asset(
+                                'android/assets/module6_1.png',
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
-                          // Biraz boşluk eklemek isterseniz
-                        ],
+                        ),
                       ),
                     ),
                   ),

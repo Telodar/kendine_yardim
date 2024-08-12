@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 //#TODO: Yeni Appbar
 
 void main() => runApp(const MyApp());
@@ -41,21 +42,87 @@ class _passwordPageState extends State<passwordPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
+    final double sidePadding = isDesktop ? 200 : 30;
+    final double horizontalPadding = isDesktop ? 200 : 0;
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF3D1953).withOpacity(0.4),
-        title: Text('Kendine Yardım'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.home),
+        title: isMobile
+            ? const Text('1. Bölüm 1. Sayfa')
+            : Row(
+          children: [
+            Image.asset(
+              'android/assets/goplogo.png',
+              height: 40,
+            ),
+            const SizedBox(width: 10),
+            const Text('1. Bölüm 1. Sayfa'),
+          ],
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.purple],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        centerTitle: true,
+        actions: isMobile
+            ? null
+            : [
+          TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/'); // Ana sayfaya yönlendirme
+              Navigator.pushReplacementNamed(context, '/M6');
             },
+            child: const Text(
+                'Kaydet & Ara Ver', style: TextStyle(color: Colors.white)),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/M6');
+            },
+            child: const Text(
+                'Kaydetmeden Çık', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
+      endDrawer: isMobile
+          ? Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: const Text(
+                  'Menü', style: TextStyle(color: Colors.white, fontSize: 24)),
+            ),
+            ListTile(
+              title: const Text('Kaydet & Ara Ver'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/Login');
+              },
+            ),
+            ListTile(
+              title: const Text('Kaydetmeden Çık'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+            ),
+          ],
+        ),
+      )
+          : null,
       body: Stack(
         children: [
           // Arka plan resmi

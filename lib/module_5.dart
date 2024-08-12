@@ -1,47 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'login.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'home_page.dart';
 import 'module_1.dart';
 import 'module_2.dart';
 import 'module_3.dart';
 import 'module_4.dart';
+import 'module_5.dart';
 import 'module_6.dart';
 import 'module_7.dart';
+import 'module_8.dart';
 import 'module_table.dart';
-//#TODO:
+import 'password_forget.dart';
+import 'signupPage.dart';
+import 'profile.dart';
+
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
-        maxWidth: 1200,
         minWidth: 450,
         defaultScale: true,
         breakpoints: [
           ResponsiveBreakpoint.resize(450, name: MOBILE),
-          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(800, name: TABLET),
           ResponsiveBreakpoint.resize(1000, name: DESKTOP),
           ResponsiveBreakpoint.autoScale(2460, name: "4K"),
         ],
         background: Container(color: Color(0xFFF5F5F5)),
       ),
-      home: const M5Page(),
+      home: const HomePage(),
       routes: {
-        '/Home': (context) => HomePage(),
-        '/Login': (context) => LoginPage(),
+        '/Login': (context) => const LoginPage(),
         '/M1': (context) => const M1Page(),
         '/M2': (context) => M2Page(),
         '/M3T': (context) => const Mtable(),
         '/M3': (context) => const M3Page(),
+        '/M5': (context) => const M5Page(),
         '/M4': (context) => const M4Page(),
         '/M6': (context) => const M6Page(),
         '/M7': (context) => const M7Page(),
+        '/M8': (context) => const M8Page(),
+        '/M0': (context) => const Mtable(),
+        '/P1': (context) => const passwordPage(),
+        '/S1': (context) => const Signup(),
+        '/P2': (context) => const ProfilePage(),
       },
     );
   }
@@ -82,23 +93,116 @@ class _M5PageState extends State<M5Page> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDesktop = MediaQuery.of(context).size.width >= 1000;
+    bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
     final double sidePadding = isDesktop ? 200 : 30;
+
 
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color(0xFF3D1953).withOpacity(0.4),
-        title: Text('Modül 5'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.home),
+        title: isMobile
+            ? const Text('Kendine Yardım')
+            : Row(
+          children: [
+            Image.asset(
+              'android/assets/goplogo.png',
+              height: 40,
+            ),
+            const SizedBox(width: 10),
+            const Text('Kendine Yardım'),
+          ],
+        ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.purple],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        centerTitle: true,
+        actions: isMobile
+            ? null
+            : [
+          TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/Home');
+              Navigator.pushReplacementNamed(context, '/Login');
             },
+            child: const Text(
+                'Giriş Yap', style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
+            child: const Text(
+                'Ana Sayfa', style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/M0');
+            },
+            child: const Text(
+                'Kendi Kendine Yardım', style: TextStyle(color: Colors.white)),
+          ),
+          const SizedBox(width: 8),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/M1');
+            },
+            child: const Text(
+                'Ekibimiz', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
+      endDrawer: isMobile
+          ? Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.green, Colors.purple],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: const Text(
+                  'Menü', style: TextStyle(color: Colors.white, fontSize: 24)),
+            ),
+            ListTile(
+              title: const Text('Giriş Yap'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/Login');
+              },
+            ),
+            ListTile(
+              title: const Text('Ana Sayfa'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+            ),
+            ListTile(
+              title: const Text('Kendi Kendine Yardım'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/M0');
+              },
+            ),
+            ListTile(
+              title: const Text('Ekibimiz'),
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/M1');
+              },
+            ),
+          ],
+        ),
+      )
+          : null,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -176,39 +280,38 @@ class _M5PageState extends State<M5Page> {
       ),
     );
   }
+}
+Widget _buildQuestionContainer(
+    String question, TextEditingController controller) {
+  return Container(
+    padding: EdgeInsets.all(20),
+    margin: EdgeInsets.only(bottom: 30),
+    constraints: BoxConstraints(maxWidth: 650),
+    decoration: BoxDecoration(
 
-  Widget _buildQuestionContainer(
-      String question, TextEditingController controller) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.only(bottom: 30),
-      constraints: BoxConstraints(maxWidth: 650),
-      decoration: BoxDecoration(
-
-        color: Color(0xFF069BBF).withOpacity(0.8),
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            question,
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          SizedBox(height: 10),
-          TextFormField(
-            controller: controller,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              hintText: 'Cevabınızı buraya yazınız',
+      color: Color(0xFF069BBF).withOpacity(0.8),
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          question,
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        SizedBox(height: 10),
+        TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
             ),
+            hintText: 'Cevabınızı buraya yazınız',
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }

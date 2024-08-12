@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'module_1.dart';
+import 'module_2.dart';
+import 'package:flutter/material.dart';
 import 'package:test3/password_forget.dart';
 import 'home_page.dart';
 //#TODO: Yeni Appbar
@@ -47,21 +51,114 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF3D1953).withOpacity(0.4),
-        title: Text('Kendine Yardım'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.home),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/'); // Ana sayfaya yönlendirme
-            },
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: isMobile
+              ? const Text('Kendine Yardım')
+              : Row(
+            children: [
+              Image.asset(
+                'android/assets/goplogo.png',
+                height: 40,
+              ),
+              const SizedBox(width: 10),
+              const Text('Kendine Yardım'),
+            ],
           ),
-        ],
-      ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.purple],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          centerTitle: true,
+          actions: isMobile
+              ? null
+              : [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/Login');
+              },
+              child: const Text(
+                  'Giriş Yap', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              child: const Text(
+                  'Ana Sayfa', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/M0');
+              },
+              child: const Text(
+                  'Kendi Kendine Yardım', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/M6');
+              },
+              child: const Text(
+                  'Ekibimiz', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
+        endDrawer: isMobile
+            ? Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue, Colors.purple],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: const Text(
+                    'Menü', style: TextStyle(color: Colors.white, fontSize: 24)),
+              ),
+              ListTile(
+                title: const Text('Giriş Yap'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/Login');
+                },
+              ),
+              ListTile(
+                title: const Text('Ana Sayfa'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+              ),
+              ListTile(
+                title: const Text('Kendi Kendine Yardım'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/M0');
+                },
+              ),
+              ListTile(
+                title: const Text('Ekibimiz'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/M6');
+                },
+              ),
+            ],
+          ),
+        )
+            : null,
       body: Stack(
         children: [
           // Arka plan resmi

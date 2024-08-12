@@ -7,12 +7,14 @@ import 'module_3.dart';
 import 'module_4.dart';
 import 'module_5.dart';
 import 'module_6.dart';
+import 'module_6v1.dart';
 import 'module_7.dart';
 import 'module_8.dart';
 import 'module_table.dart';
 import 'password_forget.dart';
 import 'signupPage.dart';
 import 'profile.dart';
+import 'module_6v2.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,12 +48,15 @@ class MyApp extends StatelessWidget {
         '/M5': (context) => const M5Page(),
         '/M4': (context) => const M4Page(),
         '/M6': (context) => const M6Page(),
+        '/M61': (context) => const M6v1Page(),
+        '/M62': (context) => const M6v2Page(),
         '/M7': (context) => const M7Page(),
         '/M8': (context) => const M8Page(),
         '/M0': (context) => const Mtable(),
         '/P1': (context) => const passwordPage(),
         '/S1': (context) => const Signup(),
         '/P2': (context) => const ProfilePage(),
+
       },
     );
   }

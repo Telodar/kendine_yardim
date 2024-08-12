@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:test3/home_page.dart';
-import 'login.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'module_1.dart';
 import 'module_2.dart';
@@ -13,7 +11,7 @@ import 'module_8.dart';
 import 'module_table.dart';
 import 'password_forget.dart';
 import 'signupPage.dart';
-//#TODO: Yeni Appbar
+import 'login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,18 +25,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       builder: (context, child) => ResponsiveWrapper.builder(
         child,
-        maxWidth: 1200,
         minWidth: 450,
         defaultScale: true,
         breakpoints: [
           ResponsiveBreakpoint.resize(450, name: MOBILE),
-          ResponsiveBreakpoint.autoScale(800, name: TABLET),
+          ResponsiveBreakpoint.resize(800, name: TABLET),
           ResponsiveBreakpoint.resize(1000, name: DESKTOP),
           ResponsiveBreakpoint.autoScale(2460, name: "4K"),
         ],
         background: Container(color: Color(0xFFF5F5F5)),
       ),
-      home: const HomePage(),
+      home: const ProfilePage(),
       routes: {
         '/Login': (context) => const LoginPage(),
         '/M1': (context) => const M1Page(),
@@ -53,10 +50,12 @@ class MyApp extends StatelessWidget {
         '/M0': (context) => const Mtable(),
         '/P1': (context) => const passwordPage(),
         '/S1': (context) => const Signup(),
+        '/P2': (context) => const ProfilePage(),
       },
     );
   }
 }
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -68,82 +67,117 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+
   @override
   Widget build(BuildContext context) {
+    bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
+
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Color(0xFF3D1953).withOpacity(0.4),
-        title: Row(
-          children: [
-            Image.asset(
-              'android/assets/goplogo.png',
-              fit: BoxFit.contain,
-              height: 32,
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: isMobile
+              ? const Text('Kendine Yardım')
+              : Row(
+            children: [
+              Image.asset(
+                'android/assets/goplogo.png',
+                height: 40,
+              ),
+              const SizedBox(width: 10),
+              const Text('Kendine Yardım'),
+            ],
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, Colors.purple],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
-            SizedBox(width: 8),
-            Text('Kendine Yardım'),
+          ),
+          centerTitle: true,
+          actions: isMobile
+              ? null
+              : [
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/Login');
+              },
+              child: const Text(
+                  'Giriş Yap', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              child: const Text(
+                  'Ana Sayfa', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/M0');
+              },
+              child: const Text(
+                  'Kendi Kendine Yardım', style: TextStyle(color: Colors.white)),
+            ),
+            const SizedBox(width: 8),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/M6');
+              },
+              child: const Text(
+                  'Ekibimiz', style: TextStyle(color: Colors.white)),
+            ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/Login');
-            },
-            child: Text('Giriş Yap', style: TextStyle(color: Colors.white)),
-          ),
-          IconButton(
-            icon: Icon(Icons.home),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/'); // Ana sayfaya yönlendirme
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              _scaffoldKey.currentState!.openEndDrawer();
-            },
-          ),
-        ],
-      ),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF3D1953).withOpacity(0.5),
-              ),
-              child: Text(
-                'Gazi Osman Paşa Üniversitesi Kendine Yardım Portalı',
-                style: TextStyle(
-                  color: Colors.indigo,
-                  fontSize: 24,
+        endDrawer: isMobile
+            ? Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue, Colors.purple],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
+                child: const Text(
+                    'Menü', style: TextStyle(color: Colors.white, fontSize: 24)),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profil'),
-              onTap: () {
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.view_module),
-              title: Text('Modüller'),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/M1');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Mesajlar'),
-              onTap: () {
-              },
-            ),
-          ],
-        ),
-      ),
+              ListTile(
+                title: const Text('Giriş Yap'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/Login');
+                },
+              ),
+              ListTile(
+                title: const Text('Ana Sayfa'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+              ),
+              ListTile(
+                title: const Text('Kendi Kendine Yardım'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/M0');
+                },
+              ),
+              ListTile(
+                title: const Text('Ekibimiz'),
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/M6');
+                },
+              ),
+            ],
+          ),
+        )
+            : null,
       body: Center(
         child: Container(
           padding: EdgeInsets.all(20.0),

@@ -14,6 +14,7 @@ import 'password_forget.dart';
 import 'signupPage.dart';
 import 'profile.dart';
 import 'home_page.dart';
+//#TODO: appbar buton üdzenlemesi
 
 void main() {
   runApp(const MyApp());
@@ -207,12 +208,7 @@ class _M4PageState extends State<M4Page> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              'android/assets/arkaplan.png', // Arka plan resminizin yolu
-              fit: BoxFit.cover, // Resmi ekranı kaplayacak şekilde ölçekle
-            ),
-          ),
+
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: sidePadding, vertical: 20),
             child: ConstrainedBox(
@@ -318,7 +314,7 @@ class _M4PageState extends State<M4Page> {
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 650),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: Container(
           height: 80,
           decoration: BoxDecoration(
