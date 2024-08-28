@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
 import 'home_page.dart';
-import 'module_1.dart';
-import 'module_2.dart';
-import 'module_3.dart';
-import 'module_4.dart';
-import 'module_5.dart';
-import 'module_6.dart';
-import 'module_7.dart';
-import 'module_8.dart';
+import 'login.dart';
+import 'module_1_1.dart';
+import 'module_1_2.dart';
+import 'module_1_3.dart';
+import 'module_1_4.dart';
+import 'module_1_5.dart';
+import 'module_1_6.dart';
+import 'module_final.dart';
 import 'module_table.dart';
 import 'password_forget.dart';
-import 'signupPage.dart';
 import 'profile.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'signupPage.dart';
 //#TODO: appbar buton üdzenlemesi
 
 void main() {

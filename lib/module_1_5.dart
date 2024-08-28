@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+
 import 'home_page.dart';
-import 'module_1.dart';
-import 'module_2.dart';
-import 'module_3.dart';
-import 'module_4.dart';
-import 'module_5.dart';
-import 'module_6.dart';
-import 'module_7.dart';
-import 'module_8.dart';
+import 'login.dart';
+import 'module_1_1.dart';
+import 'module_1_2.dart';
+import 'module_1_3.dart';
+import 'module_1_4.dart';
+import 'module_1_6.dart';
+import 'module_1_7.dart';
+import 'module_final.dart';
 import 'module_table.dart';
 import 'password_forget.dart';
-import 'signupPage.dart';
 import 'profile.dart';
+import 'signupPage.dart';
 
 void main() {
   runApp(const MyApp());

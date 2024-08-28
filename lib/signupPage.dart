@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'module_1.dart';
-import 'module_2.dart';
-import 'package:flutter/material.dart';
 import 'package:test3/password_forget.dart';
+
 import 'home_page.dart';
 //#TODO: Yeni Appbar
 

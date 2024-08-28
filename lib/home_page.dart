@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'module_1.dart';
-import 'module_2.dart';
-import 'module_3.dart';
-import 'module_4.dart';
-import 'module_5.dart';
-import 'module_6.dart';
-import 'module_6v1.dart';
-import 'module_7.dart';
-import 'module_8.dart';
+
+import 'login.dart';
+import 'module_1_1.dart';
+import 'module_1_2.dart';
+import 'module_1_3.dart';
+import 'module_1_4.dart';
+import 'module_1_5.dart';
+import 'module_1_6.dart';
+import 'module_1_6v1.dart';
+import 'module_1_6v2.dart';
+import 'module_1_7.dart';
+import 'module_final.dart';
 import 'module_table.dart';
 import 'password_forget.dart';
-import 'signupPage.dart';
 import 'profile.dart';
-import 'module_6v2.dart';
+import 'self_help.dart';
+import 'signupPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,6 +58,8 @@ class MyApp extends StatelessWidget {
         '/P1': (context) => const passwordPage(),
         '/S1': (context) => const Signup(),
         '/P2': (context) => const ProfilePage(),
+        '/SH': (context) => const SelfhelpPage(),
+
 
       },
     );
@@ -76,7 +80,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     bool isMobile = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
-    bool isDesktop = ResponsiveWrapper.of(context).isLargerThan(TABLET);
+
 
     Widget _buildTextContainer(double width, double height) {
       return Container(
@@ -237,7 +241,7 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(width: 8),
           TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/M0');
+              Navigator.pushReplacementNamed(context, '/SH');
             },
             child: const Text(
                 'Kendi Kendine Yardım', style: TextStyle(color: Colors.white)),
@@ -245,7 +249,7 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(width: 8),
           TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/M1');
+              Navigator.pushReplacementNamed(context, '/');
             },
             child: const Text(
                 'Ekibimiz', style: TextStyle(color: Colors.white)),
@@ -283,13 +287,13 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: const Text('Kendi Kendine Yardım'),
               onTap: () {
-                Navigator.pushReplacementNamed(context, '/M0');
+                Navigator.pushReplacementNamed(context, '/SH');
               },
             ),
             ListTile(
               title: const Text('Ekibimiz'),
               onTap: () {
-                Navigator.pushReplacementNamed(context, '/M1');
+                Navigator.pushReplacementNamed(context, '/');
               },
             ),
           ],
